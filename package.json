@@ -1,11 +1,14 @@
 {
-  "name": "keymaster",
-  "description": "library for defining and dispatching keyboard shortcuts",
-  "version": "1.6.3",
-  "author": "Thomas Fuchs <thomas@slash7.com> (http://mir.aculo.us)",
+  "name": "keymaestro",
+  "description":
+    "Library for defining and dispatching keyboard shortcuts. Forked from keymaster.js by Thomas Fuchs.",
+  "version": "0.0.1",
+  "author": "Christian Schuhmann",
+  "contributors": ["Thomas Fuchs <thomas@slash7.com> (http://mir.aculo.us)"],
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/madrobby/keymaster"
+    "url": "https://github.com/madebyherzblut/keymaestro"
   },
-  "main": "./keymaster.js"
+  "main": "./keymaestro.js"
 }
