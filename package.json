@@ -1,14 +1,36 @@
 {
   "name": "keymaestro",
-  "description":
-    "Library for defining and dispatching keyboard shortcuts. Forked from keymaster.js by Thomas Fuchs.",
-  "version": "0.0.1",
+  "description": "Library for defining and dispatching keyboard shortcuts. Forked from keymaster.js by Thomas Fuchs.",
+  "version": "0.1.0",
   "author": "Christian Schuhmann",
-  "contributors": ["Thomas Fuchs <thomas@slash7.com> (http://mir.aculo.us)"],
+  "contributors": [
+    "Thomas Fuchs <thomas@slash7.com> (http://mir.aculo.us)"
+  ],
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/madebyherzblut/keymaestro"
+  "main": "dist/keymaestro.js",
+  "jsnext:main": "src/index.js",
+  "module": "src/index.js",
+  "repository": "madebyherzblut/keymaestro",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "test": "",
+    "build": "npm run bundle && npm run minify",
+    "bundle": "rollup -i src/index.js -o dist/keymaestro.js -m -f umd -n keymaestro",
+    "minify": "uglifyjs dist/keymaestro.js -o dist/keymaestro.js -mc pure_funcs=Object.defineProperty --source-map includeSources,url=keymaestro.js.map",
+    "prepare": "npm run build",
+    "format": "prettier --write 'src/**/*.js'",
+    "release": "npm run build && git commit -am $npm_package_version && git tag $npm_package_version && git push origin master && git push --tags && npm publish"
   },
-  "main": "./keymaestro.js"
+  "babel": {
+    "presets": "env"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.6.1",
+    "prettier": "^1.10.2",
+    "rollup": "^0.57.1",
+    "uglify-js": "^3.3.10"
+  }
 }
