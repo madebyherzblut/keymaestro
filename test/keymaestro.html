@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>Keymaestro unit tests</title>
   <script src="../dist/keymaestro.js"></script>
   <script src="./evidence.js"></script>
 </head>
+
 <body>
   <h1>Keymaestro unit tests</h1>
   <p>
@@ -17,35 +19,35 @@
   <select id="select"></select>
 
   <script>
-    function $(id){
+    function $(id) {
       return document.getElementById(id);
     }
 
     var modifierMap = {
-      16:'shiftKey',
-      18:'altKey',
-      17:'ctrlKey',
-      91:'metaKey'
+      16: 'shiftKey',
+      18: 'altKey',
+      17: 'ctrlKey',
+      91: 'metaKey'
     };
 
     // because the DOM is retarded,
     // and browsers don't really care about the DOM API anyway
     // (IE, Firefox, WebKit are all using different event generators),
     // we'll just simulate events roughly
-    function keydown(code, modifiers, el){
+    function keydown(code, modifiers, el) {
       var event = document.createEvent('Event');
       event.initEvent('keydown', true, true);
       event.keyCode = code;
       if (modifiers && modifiers.length > 0)
-          for(i in modifiers) event[modifierMap[modifiers[i]]] = true;
-      (el||document).dispatchEvent(event);
+        for (i in modifiers) event[modifierMap[modifiers[i]]] = true;
+      (el || document).dispatchEvent(event);
     }
 
-    function keyup(code, el){
+    function keyup(code, el) {
       var event = document.createEvent('Event');
       event.initEvent('keyup', true, true);
       event.keyCode = code;
-      (el||document).dispatchEvent(event);
+      (el || document).dispatchEvent(event);
     }
 
     var KEYS = {
@@ -56,9 +58,9 @@
     };
 
     Evidence.TestCase.extend('KeymaestroTest', {
-      testShortcut: function(t){
+      testShortcut: function (t) {
         var cnt = 0;
-        keymaestro.bind('a', function(){ cnt++ });
+        keymaestro.bind('a', function () { cnt++ });
         keydown(65);
         keyup(65);
         t.assertEqual(1, cnt);
@@ -67,9 +69,9 @@
         t.assertEqual(2, cnt);
       },
 
-      testUnbind: function(t){
+      testUnbind: function (t) {
         var cnt = 0;
-        keymaestro.bind('a', function(){ cnt++ });
+        keymaestro.bind('a', function () { cnt++ });
         keydown(65);
         keyup(65);
         t.assertEqual(1, cnt);
@@ -79,13 +81,13 @@
         t.assertEqual(1, cnt);
       },
 
-      testShortcutWithModifiers: function(t){
+      testShortcutWithModifiers: function (t) {
         var cntA = 0, cntShiftA = 0, cntCtrlShiftA = 0, cntCommandCtrlShiftA = 0, cntCommandCtrlAltShiftA = 0;
-        keymaestro.bind('a', function(){ cntA++ });
-        keymaestro.bind('shift+a', function(){ cntShiftA++ });
-        keymaestro.bind('ctrl+shift+a', function(){ cntCtrlShiftA++ });
-        keymaestro.bind('command+ctrl+shift+a', function(){ cntCommandCtrlShiftA++ });
-        keymaestro.bind('command+ctrl+alt+shift+a', function(){ cntCommandCtrlAltShiftA++ });
+        keymaestro.bind('a', function () { cntA++ });
+        keymaestro.bind('shift+a', function () { cntShiftA++ });
+        keymaestro.bind('ctrl+shift+a', function () { cntCtrlShiftA++ });
+        keymaestro.bind('command+ctrl+shift+a', function () { cntCommandCtrlShiftA++ });
+        keymaestro.bind('command+ctrl+alt+shift+a', function () { cntCommandCtrlAltShiftA++ });
 
         keydown(65); keyup(65);
         t.assertEqual(1, cntA);
@@ -127,13 +129,13 @@
         t.assertEqual(1, cntCommandCtrlAltShiftA);
       },
 
-      testUnbindWithModifiers: function(t){
+      testUnbindWithModifiers: function (t) {
         var cntA = 0, cntShiftA = 0, cntCtrlShiftA = 0, cntCommandCtrlShiftA = 0, cntCommandCtrlAltShiftA = 0;
-        keymaestro.bind('a', function(){ cntA++ });
-        keymaestro.bind('shift+a', function(){ cntShiftA++ });
-        keymaestro.bind('ctrl+shift+a', function(){ cntCtrlShiftA++ });
-        keymaestro.bind('command+ctrl+shift+a', function(){ cntCommandCtrlShiftA++ });
-        keymaestro.bind('command+ctrl+alt+shift+a', function(){ cntCommandCtrlAltShiftA++ });
+        keymaestro.bind('a', function () { cntA++ });
+        keymaestro.bind('shift+a', function () { cntShiftA++ });
+        keymaestro.bind('ctrl+shift+a', function () { cntCtrlShiftA++ });
+        keymaestro.bind('command+ctrl+shift+a', function () { cntCommandCtrlShiftA++ });
+        keymaestro.bind('command+ctrl+alt+shift+a', function () { cntCommandCtrlAltShiftA++ });
 
         keydown(65); keyup(65);
         keydown(KEYS.shift); keydown(65, [16]); keyup(65); keyup(KEYS.shift);
@@ -174,11 +176,11 @@
         t.assertEqual(1, cntCommandCtrlAltShiftA);
       },
 
-      testUnbindWithModifiersMultiple: function(t){
+      testUnbindWithModifiersMultiple: function (t) {
         var cntA = 0, cntShiftA = 0, cntCtrlShiftA = 0;
-        keymaestro.bind('a', function(){ cntA++ });
-        keymaestro.bind('shift+a', function(){ cntShiftA++ });
-        keymaestro.bind('ctrl+shift+a', function(){ cntCtrlShiftA++ });
+        keymaestro.bind('a', function () { cntA++ });
+        keymaestro.bind('shift+a', function () { cntShiftA++ });
+        keymaestro.bind('ctrl+shift+a', function () { cntCtrlShiftA++ });
 
         keydown(65); keyup(65);
         keydown(KEYS.shift); keydown(65, [16]); keyup(65); keyup(KEYS.shift);
@@ -199,9 +201,9 @@
         t.assertEqual(1, cntCtrlShiftA);
       },
 
-      testUnbindWithKeysMultiple: function(t){
+      testUnbindWithKeysMultiple: function (t) {
         var cntSlashF = 0;
-        keymaestro.bind('/, f', function(){ cntSlashF++ });
+        keymaestro.bind('/, f', function () { cntSlashF++ });
 
         keydown(191); keyup(191);
         keydown(70); keyup(70);
@@ -216,12 +218,12 @@
         t.assertEqual(2, cntSlashF);
       },
 
-      testFancyModifierKeys: function(t){
+      testFancyModifierKeys: function (t) {
         var sequence = '';
-        keymaestro.bind('⌃+a', function(){ sequence += 'a' });
-        keymaestro.bind('⌥+b', function(){ sequence += 'b' });
-        keymaestro.bind('⇧+c', function(){ sequence += 'c' });
-        keymaestro.bind('⌘+d', function(){ sequence += 'd' });
+        keymaestro.bind('⌃+a', function () { sequence += 'a' });
+        keymaestro.bind('⌥+b', function () { sequence += 'b' });
+        keymaestro.bind('⇧+c', function () { sequence += 'c' });
+        keymaestro.bind('⌘+d', function () { sequence += 'd' });
 
         keydown(KEYS.ctrl); keydown(65, [17]); keyup(65); keyup(KEYS.ctrl);
         keydown(KEYS.option); keydown(66, [18]); keyup(66); keyup(KEYS.option);
@@ -231,16 +233,18 @@
         t.assertEqual('abcd', sequence);
       },
 
-      testNonAlphanumericKeys: function(t){
+      testNonAlphanumericKeys: function (t) {
         var sequence = '', character,
-          keys = { ',': 188, '.': 190, '/': 191,
+          keys = {
+            ',': 188, '.': 190, '/': 191,
             '`': 192, '-': 189, '=': 187,
             ';': 186, '\'': 222,
-            '[': 219, ']': 221, '\\': 220 };
+            '[': 219, ']': 221, '\\': 220
+          };
 
-        for(character in keys){
-          keymaestro.bind(character, (function(character){
-            return function(){ sequence += character }
+        for (character in keys) {
+          keymaestro.bind(character, (function (character) {
+            return function () { sequence += character }
           })(character));
           keydown(keys[character]); keyup(keys[character]);
         }
@@ -248,13 +252,13 @@
         t.assertEqual(',./`-=;\'[]\\', sequence);
       },
 
-      testFKeys: function(t) {
+      testFKeys: function (t) {
         var sequence = '';
-        for(var i=1;i<=19;i++) {
-          keymaestro.bind('f' + i , function(){ sequence += '' + i });
+        for (var i = 1; i <= 19; i++) {
+          keymaestro.bind('f' + i, function () { sequence += '' + i });
         }
 
-        for(var i=1;i<=19;i++) {
+        for (var i = 1; i <= 19; i++) {
           keydown(111 + i);
           keyup(111 + i);
         }
@@ -262,28 +266,28 @@
         t.assertEqual('12345678910111213141516171819', sequence);
       },
 
-      testNamedSpecialKeys: function(t){
+      testNamedSpecialKeys: function (t) {
         // TODO
       },
 
-      testEventCancelling: function(t){
+      testEventCancelling: function (t) {
         // TODO
       },
 
-      testEventArguments: function(t){
+      testEventArguments: function (t) {
         // TODO
       },
 
-      testModifierBooleans: function(t){
+      testModifierBooleans: function (t) {
         // TODO
       },
 
-      testScoping: function(t){
+      testScoping: function (t) {
         var sequence = '';
 
-        keymaestro.bind('a', function(){ sequence += 'a' });
-        keymaestro.bind('b', function(){ sequence += 'b' });
-        keymaestro.bind('b', 'capital', function(){ sequence += 'B' });
+        keymaestro.bind('a', function () { sequence += 'a' });
+        keymaestro.bind('b', function () { sequence += 'b' });
+        keymaestro.bind('b', 'capital', function () { sequence += 'B' });
 
         keydown(65); keyup(65);
         keymaestro.setScope('capital');
@@ -299,8 +303,8 @@
         // it should not call second callback after changing scope in one of callbacks
         var sequence = '';
 
-        keymaestro.bind('c', 'a', function(){ sequence += 'a'; keymaestro.setScope('b');  });
-        keymaestro.bind('c', 'b', function(){ sequence += 'b'; });
+        keymaestro.bind('c', 'a', function () { sequence += 'a'; keymaestro.setScope('b'); });
+        keymaestro.bind('c', 'b', function () { sequence += 'b'; });
 
         keymaestro.setScope('a');
         keydown(67); keyup(67);
@@ -310,13 +314,13 @@
         t.assertEqual('ab', sequence);
       },
 
-      testDeleteScope: function(t){
+      testDeleteScope: function (t) {
         var sequence = '';
 
-        keymaestro.bind('a', function(){ sequence += 'a' });
-        keymaestro.bind('b', function(){ sequence += 'b' });
-        keymaestro.bind('a', 'capital', function(){ sequence += 'A' });
-        keymaestro.bind('b', 'capital', function(){ sequence += 'B' });
+        keymaestro.bind('a', function () { sequence += 'a' });
+        keymaestro.bind('b', function () { sequence += 'b' });
+        keymaestro.bind('a', 'capital', function () { sequence += 'A' });
+        keymaestro.bind('b', 'capital', function () { sequence += 'B' });
 
         keydown(65); keyup(65);
         keydown(66); keyup(66);
@@ -330,10 +334,10 @@
         t.assertEqual('abaAbBab', sequence);
       },
 
-      testUnbindWithScope: function(t){
+      testUnbindWithScope: function (t) {
         var cntIssues = 0, cntFiles = 0;
-        keymaestro.bind('a', 'issues', function(){ cntIssues++ });
-        keymaestro.bind('a', 'files', function(){ cntFiles++ });
+        keymaestro.bind('a', 'issues', function () { cntIssues++ });
+        keymaestro.bind('a', 'files', function () { cntFiles++ });
 
         keymaestro.setScope('issues');
         keydown(65);
@@ -355,7 +359,7 @@
         t.assertEqual(1, cntIssues);
       },
 
-      testDoesntFireOnUserInputElements: function(t){
+      testDoesntFireOnUserInputElements: function (t) {
         // TODO
       },
 
@@ -454,4 +458,5 @@
     });
   </script>
 </body>
+
 </html>
