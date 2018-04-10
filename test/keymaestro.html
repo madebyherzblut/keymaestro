@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>Keymaestro unit tests</title>
-  <script src="../keymaestro.js"></script>
-  <script src="evidence.js"></script>
+  <script src="../dist/keymaestro.js"></script>
+  <script src="./evidence.js"></script>
 </head>
 <body>
   <h1>Keymaestro unit tests</h1>
@@ -58,7 +58,7 @@
     Evidence.TestCase.extend('KeymaestroTest', {
       testShortcut: function(t){
         var cnt = 0;
-        key('a', function(){ cnt++ });
+        keymaestro.bind('a', function(){ cnt++ });
         keydown(65);
         keyup(65);
         t.assertEqual(1, cnt);
@@ -69,11 +69,11 @@
 
       testUnbind: function(t){
         var cnt = 0;
-        key('a', function(){ cnt++ });
+        keymaestro.bind('a', function(){ cnt++ });
         keydown(65);
         keyup(65);
         t.assertEqual(1, cnt);
-        key.unbind('a');
+        keymaestro.unbind('a');
         keydown(65);
         keyup(65);
         t.assertEqual(1, cnt);
@@ -81,11 +81,11 @@
 
       testShortcutWithModifiers: function(t){
         var cntA = 0, cntShiftA = 0, cntCtrlShiftA = 0, cntCommandCtrlShiftA = 0, cntCommandCtrlAltShiftA = 0;
-        key('a', function(){ cntA++ });
-        key('shift+a', function(){ cntShiftA++ });
-        key('ctrl+shift+a', function(){ cntCtrlShiftA++ });
-        key('command+ctrl+shift+a', function(){ cntCommandCtrlShiftA++ });
-        key('command+ctrl+alt+shift+a', function(){ cntCommandCtrlAltShiftA++ });
+        keymaestro.bind('a', function(){ cntA++ });
+        keymaestro.bind('shift+a', function(){ cntShiftA++ });
+        keymaestro.bind('ctrl+shift+a', function(){ cntCtrlShiftA++ });
+        keymaestro.bind('command+ctrl+shift+a', function(){ cntCommandCtrlShiftA++ });
+        keymaestro.bind('command+ctrl+alt+shift+a', function(){ cntCommandCtrlAltShiftA++ });
 
         keydown(65); keyup(65);
         t.assertEqual(1, cntA);
@@ -129,11 +129,11 @@
 
       testUnbindWithModifiers: function(t){
         var cntA = 0, cntShiftA = 0, cntCtrlShiftA = 0, cntCommandCtrlShiftA = 0, cntCommandCtrlAltShiftA = 0;
-        key('a', function(){ cntA++ });
-        key('shift+a', function(){ cntShiftA++ });
-        key('ctrl+shift+a', function(){ cntCtrlShiftA++ });
-        key('command+ctrl+shift+a', function(){ cntCommandCtrlShiftA++ });
-        key('command+ctrl+alt+shift+a', function(){ cntCommandCtrlAltShiftA++ });
+        keymaestro.bind('a', function(){ cntA++ });
+        keymaestro.bind('shift+a', function(){ cntShiftA++ });
+        keymaestro.bind('ctrl+shift+a', function(){ cntCtrlShiftA++ });
+        keymaestro.bind('command+ctrl+shift+a', function(){ cntCommandCtrlShiftA++ });
+        keymaestro.bind('command+ctrl+alt+shift+a', function(){ cntCommandCtrlAltShiftA++ });
 
         keydown(65); keyup(65);
         keydown(KEYS.shift); keydown(65, [16]); keyup(65); keyup(KEYS.shift);
@@ -151,11 +151,11 @@
         t.assertEqual(1, cntCommandCtrlShiftA);
         t.assertEqual(1, cntCommandCtrlAltShiftA);
 
-        key.unbind('a');
-        key.unbind('shift+a');
-        key.unbind('ctrl+shift+a');
-        key.unbind('command+ctrl+shift+a');
-        key.unbind('command+ctrl+alt+shift+a');
+        keymaestro.unbind('a');
+        keymaestro.unbind('shift+a');
+        keymaestro.unbind('ctrl+shift+a');
+        keymaestro.unbind('command+ctrl+shift+a');
+        keymaestro.unbind('command+ctrl+alt+shift+a');
 
         keydown(65); keyup(65);
         keydown(KEYS.shift); keydown(65, [16]); keyup(65); keyup(KEYS.shift);
@@ -176,9 +176,9 @@
 
       testUnbindWithModifiersMultiple: function(t){
         var cntA = 0, cntShiftA = 0, cntCtrlShiftA = 0;
-        key('a', function(){ cntA++ });
-        key('shift+a', function(){ cntShiftA++ });
-        key('ctrl+shift+a', function(){ cntCtrlShiftA++ });
+        keymaestro.bind('a', function(){ cntA++ });
+        keymaestro.bind('shift+a', function(){ cntShiftA++ });
+        keymaestro.bind('ctrl+shift+a', function(){ cntCtrlShiftA++ });
 
         keydown(65); keyup(65);
         keydown(KEYS.shift); keydown(65, [16]); keyup(65); keyup(KEYS.shift);
@@ -188,7 +188,7 @@
         t.assertEqual(1, cntShiftA);
         t.assertEqual(1, cntCtrlShiftA);
 
-        key.unbind('a, shift+a, ctrl+shift+a');
+        keymaestro.unbind('a, shift+a, ctrl+shift+a');
 
         keydown(65); keyup(65);
         keydown(KEYS.shift); keydown(65, [16]); keyup(65); keyup(KEYS.shift);
@@ -201,14 +201,14 @@
 
       testUnbindWithKeysMultiple: function(t){
         var cntSlashF = 0;
-        key('/, f', function(){ cntSlashF++ });
+        keymaestro.bind('/, f', function(){ cntSlashF++ });
 
         keydown(191); keyup(191);
         keydown(70); keyup(70);
 
         t.assertEqual(2, cntSlashF);
 
-        key.unbind('/, f');
+        keymaestro.unbind('/, f');
 
         keydown(191); keyup(191);
         keydown(70); keyup(70);
@@ -218,10 +218,10 @@
 
       testFancyModifierKeys: function(t){
         var sequence = '';
-        key('⌃+a', function(){ sequence += 'a' });
-        key('⌥+b', function(){ sequence += 'b' });
-        key('⇧+c', function(){ sequence += 'c' });
-        key('⌘+d', function(){ sequence += 'd' });
+        keymaestro.bind('⌃+a', function(){ sequence += 'a' });
+        keymaestro.bind('⌥+b', function(){ sequence += 'b' });
+        keymaestro.bind('⇧+c', function(){ sequence += 'c' });
+        keymaestro.bind('⌘+d', function(){ sequence += 'd' });
 
         keydown(KEYS.ctrl); keydown(65, [17]); keyup(65); keyup(KEYS.ctrl);
         keydown(KEYS.option); keydown(66, [18]); keyup(66); keyup(KEYS.option);
@@ -239,7 +239,7 @@
             '[': 219, ']': 221, '\\': 220 };
 
         for(character in keys){
-          key(character, (function(character){
+          keymaestro.bind(character, (function(character){
             return function(){ sequence += character }
           })(character));
           keydown(keys[character]); keyup(keys[character]);
@@ -251,7 +251,7 @@
       testFKeys: function(t) {
         var sequence = '';
         for(var i=1;i<=19;i++) {
-          key('f' + i , function(){ sequence += '' + i });
+          keymaestro.bind('f' + i , function(){ sequence += '' + i });
         }
 
         for(var i=1;i<=19;i++) {
@@ -281,17 +281,17 @@
       testScoping: function(t){
         var sequence = '';
 
-        key('a', function(){ sequence += 'a' });
-        key('b', function(){ sequence += 'b' });
-        key('b', 'capital', function(){ sequence += 'B' });
+        keymaestro.bind('a', function(){ sequence += 'a' });
+        keymaestro.bind('b', function(){ sequence += 'b' });
+        keymaestro.bind('b', 'capital', function(){ sequence += 'B' });
 
         keydown(65); keyup(65);
-        key.setScope('capital');
+        keymaestro.setScope('capital');
         keydown(66); keyup(66);
         keydown(65); keyup(65);
-        key.setScope('unknown');
+        keymaestro.setScope('unknown');
         keydown(66); keyup(66);
-        key.setScope('all');
+        keymaestro.setScope('all');
         keydown(65); keyup(65);
 
         t.assertEqual('abBaba', sequence);
@@ -299,13 +299,13 @@
         // it should not call second callback after changing scope in one of callbacks
         var sequence = '';
 
-        key('c', 'a', function(){ sequence += 'a'; key.setScope('b');  });
-        key('c', 'b', function(){ sequence += 'b'; });
+        keymaestro.bind('c', 'a', function(){ sequence += 'a'; keymaestro.setScope('b');  });
+        keymaestro.bind('c', 'b', function(){ sequence += 'b'; });
 
-        key.setScope('a');
+        keymaestro.setScope('a');
         keydown(67); keyup(67);
         keydown(67); keyup(67);
-        key.setScope('all');
+        keymaestro.setScope('all');
 
         t.assertEqual('ab', sequence);
       },
@@ -313,17 +313,17 @@
       testDeleteScope: function(t){
         var sequence = '';
 
-        key('a', function(){ sequence += 'a' });
-        key('b', function(){ sequence += 'b' });
-        key('a', 'capital', function(){ sequence += 'A' });
-        key('b', 'capital', function(){ sequence += 'B' });
+        keymaestro.bind('a', function(){ sequence += 'a' });
+        keymaestro.bind('b', function(){ sequence += 'b' });
+        keymaestro.bind('a', 'capital', function(){ sequence += 'A' });
+        keymaestro.bind('b', 'capital', function(){ sequence += 'B' });
 
         keydown(65); keyup(65);
         keydown(66); keyup(66);
-        key.setScope('capital');
+        keymaestro.setScope('capital');
         keydown(65); keyup(65);
         keydown(66); keyup(66);
-        key.deleteScope('capital');
+        keymaestro.deleteScope('capital');
         keydown(65); keyup(65);
         keydown(66); keyup(66);
 
@@ -332,23 +332,23 @@
 
       testUnbindWithScope: function(t){
         var cntIssues = 0, cntFiles = 0;
-        key('a', 'issues', function(){ cntIssues++ });
-        key('a', 'files', function(){ cntFiles++ });
+        keymaestro.bind('a', 'issues', function(){ cntIssues++ });
+        keymaestro.bind('a', 'files', function(){ cntFiles++ });
 
-        key.setScope('issues');
+        keymaestro.setScope('issues');
         keydown(65);
         keyup(65);
         t.assertEqual(1, cntIssues);
-        key.unbind('a', 'issues');
+        keymaestro.unbind('a', 'issues');
         keydown(65);
         keyup(65);
         t.assertEqual(1, cntIssues);
 
-        key.setScope('files');
+        keymaestro.setScope('files');
         keydown(65);
         keyup(65);
         t.assertEqual(1, cntFiles);
-        key.unbind('a', 'files');
+        keymaestro.unbind('a', 'files');
         keydown(65);
         keyup(65);
         t.assertEqual(1, cntFiles);
@@ -359,53 +359,53 @@
         // TODO
       },
 
-      testCallsFilterFunction: function(t){
-        var oldFilter = key.filter, filterCalls = 0, keyCalls = 0;
+      /*testCallsFilterFunction: function(t){
+        var oldFilter = keymaestro.filter, filterCalls = 0, keyCalls = 0;
 
-        key.filter = function(event){
+        keymaestro.filter = function(event){
           filterCalls++;
           return false;
         }
 
-        key('a', function(){ keyCalls++; });
+        keymaestro.bind('a', function(){ keyCalls++; });
         keydown(65); keyup(65);
 
         t.assertEqual(1, filterCalls);
         t.assertEqual(0, keyCalls);
 
-        key.filter = oldFilter;
+        keymaestro.filter = oldFilter;
         keydown(65); keyup(65);
 
         t.assertEqual(1, filterCalls);
         t.assertEqual(1, keyCalls);
-      },
+      },*/
 
       testIsPressed: function (t) {
         keydown(65);
-        t.assertTrue(key.isPressed(65));
-        t.assertTrue(key.isPressed("a"));
+        t.assertTrue(keymaestro.isPressed(65));
+        t.assertTrue(keymaestro.isPressed("a"));
         keyup(65);
 
         keydown(66); keyup(66);
-        t.assertFalse(key.isPressed(66));
+        t.assertFalse(keymaestro.isPressed(66));
 
         keydown(38);
-        t.assertTrue(key.isPressed("up"));
+        t.assertTrue(keymaestro.isPressed("up"));
         keyup(38);
       },
 
       testGetPressedKeyCodes: function (t) {
         keydown(65); keydown(KEYS.shift);
-        var pressedKeys = key.getPressedKeyCodes();
-        var otherKeys = key.getPressedKeyCodes();
+        var pressedKeys = keymaestro.getPressedKeyCodes();
+        var otherKeys = keymaestro.getPressedKeyCodes();
         t.assertTrue(pressedKeys.indexOf(65) >= 0);
         t.assertTrue(pressedKeys.indexOf(16) >= 0);
         t.assertTrue(pressedKeys !== otherKeys);
         keyup(65); keyup(KEYS.shift);
       },
 
-      testNoConflict: function(t) {
-        var k = key.noConflict();
+      /*testNoConflict: function(t) {
+        var k = keymaestro.noConflict();
         t.assertEqual(undefined, window.key);
         var called = false;
         k('a', function() {
@@ -414,23 +414,23 @@
         keydown(65); keyup(65);
         t.assertEqual(called, true);
         window.key = k;
-      },
+      },*/
 
-      testScopeChangeDuringFilter: function(t) {
-        var oldFilter = key.filter
+      /*testScopeChangeDuringFilter: function(t) {
+        var oldFilter = keymaestro.filter
           , scope1Pressed = 0
           , scope2Pressed = 0;
 
-        key('a', 'scope1', function() {
+        keymaestro.bind('a', 'scope1', function() {
           ++scope1Pressed;
         });
 
-        key('a', 'scope2', function() {
+        keymaestro.bind('a', 'scope2', function() {
           ++scope2Pressed;
         });
 
-        key.filter = function() {
-          key.setScope('scope1');
+        keymaestro.filter = function() {
+          keymaestro.setScope('scope1');
           return true;
         };
 
@@ -438,8 +438,8 @@
         keyup(65);
         t.assertTrue(scope1Pressed === 1);
 
-        key.filter = function() {
-          key.setScope('scope2');
+        keymaestro.filter = function() {
+          keymaestro.setScope('scope2');
           return true;
         };
 
@@ -448,9 +448,9 @@
         t.assertTrue(scope1Pressed === 1);
         t.assertTrue(scope2Pressed === 1);
 
-        key.filter = oldFilter;
-        key.setScope();
-      }
+        keymaestro.filter = oldFilter;
+        keymaestro.setScope();
+      }*/
     });
   </script>
 </body>
